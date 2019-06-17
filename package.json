@@ -1,0 +1,19 @@
+{
+  "name": "events-api",
+  "version": "1.0.0",
+  "description": "API notifying events near east village",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/traumasv/events-api.git"
+  },
+  "author": "Joey Park",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/traumasv/events-api/issues"
+  },
+  "homepage": "https://github.com/traumasv/events-api#readme"
+}
