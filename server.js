@@ -1,30 +1,55 @@
-import express from 'express';
-const app = express();
+const express = require('express');
 const path = require('path');
-const bodyParser = require('bodyParser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const mongoose = require('mongoose');
+const errorHandler = require('errorhandler');
+require('./db.js');
+require('./models/users.js');
+require('./config/passport.js');
 
+//Configure mongoose's promise to global promise
+mongoose.promise = global.Promise;
+
+const app = express();
+
+//Configure app
+//have a routes middleware (refers to index.js)
+app.use(require('./routes'));
+app.use(require('morgan')('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
-app.use(express.urlencoded({extended:false}));
 
-app.get('/register', function(){
-    const html = path.resolve(__dirname, 'index.html');
-    res.sendFile(html);
-});
+//initializing passport
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/login', function(){
-    const html = path.resolve(__dirname, 'index.html');
-    res.sendFile(html);
-});
+if(process.env.NODE_ENV !== 'PRODUCTION'){
+    app.use(errorHandler());
 
-app.get('/getEvents', function(){
-    const html = path.resolve(__dirname, 'index.html');
-    res.sendFile(html);
-});
+    app.use((err, req, res) => {
+      res.status(err.status || 500);
+  
+      res.json({
+        errors: {
+          message: err.message,
+          error: err,
+        },
+      });
+    });
 
-app.get('/setPreferences', function(){
-    const html = path.resolve(__dirname, 'index.html');
-    res.sendFile(html);
+}
+
+app.use((err, req, res) => {
+  res.status(err.status || 500);
+
+  res.json({
+    errors: {
+      message: err.message,
+      error: {},
+    },
+  });
 });
 
 app.listen(process.env.port || 3000, function(){
