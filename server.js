@@ -5,7 +5,7 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const errorHandler = require('errorhandler');
 require('./db.js');
-require('./models/users.js');
+require('./models/Users.js');
 require('./config/passport.js');
 
 //Configure mongoose's promise to global promise
@@ -15,16 +15,19 @@ const app = express();
 
 //Configure app
 //have a routes middleware (refers to index.js)
-app.use(require('./routes'));
-app.use(require('morgan')('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
 
 //initializing passport
+const passport = require('passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(require('./routes'));
+app.use(require('morgan')('dev'));
+
+/*
 if(process.env.NODE_ENV !== 'PRODUCTION'){
     app.use(errorHandler());
 
@@ -51,6 +54,7 @@ app.use((err, req, res) => {
     },
   });
 });
+*/
 
 app.listen(process.env.port || 3000, function(){
     console.log('server started');

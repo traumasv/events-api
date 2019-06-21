@@ -6,7 +6,8 @@ const Users = mongoose.model('Users');
 
 //POST new user route (optional, everyone has access)
 router.post('/', auth.optional, (req, res, next) => {
-  const { body: { user } } = req;
+  console.log(req.body);
+  const user = req.body;
 
   if(!user.username) {
     return res.status(422).json({
@@ -53,7 +54,7 @@ router.post('/', auth.optional, (req, res, next) => {
 
 //POST login route (optional, everyone has access)
 router.post('/login', auth.optional, (req, res, next) => {
-  const { body: { user } } = req;
+  const user = req.body;
 
   if(!user.username) {
     return res.status(422).json({
@@ -88,7 +89,7 @@ router.post('/login', auth.optional, (req, res, next) => {
 
 //GET current route (required, only authenticated users have access)
 router.get('/current', auth.required, (req, res, next) => {
-  const { payload: { id } } = req;
+  const id = req.body;
 
   return Users.findById(id)
     .then((user) => {
@@ -102,7 +103,8 @@ router.get('/current', auth.required, (req, res, next) => {
 
 //GET events route (required, only authenticated users have access)
 router.get('/events', auth.required, (req, res, next) => {
-  const { payload: { id } } = req;
+  console.log(req.body);
+  const id = req.body;
 
   return Users.findById(id)
     .then((user) => {
